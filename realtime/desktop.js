@@ -59,12 +59,12 @@ const aChart = new Chart(actx, data);
 const updateData = ({ gamma, beta, dev, sum, sec, alpha }) => {
   const timely = (data) => ({ x: sec, data });
 
-  aChart.data.datasets[0].data.concat(timely(gamma));
-  aChart.data.datasets[1].data.concat(timely(beta));
-  aChart.data.datasets[2].data.concat(timely(dev));
-  aChart.data.datasets[3].data.concat(timely(sum));
-  aChart.data.datasets[4].data.concat(timely(alpha));
-  aChart.data.labels.concat(new Date(sec).getSeconds());
+  aChart.data.datasets[0].data.push(timely(gamma));
+  aChart.data.datasets[1].data.push(timely(beta));
+  aChart.data.datasets[2].data.push(timely(dev));
+  aChart.data.datasets[3].data.push(timely(sum));
+  aChart.data.datasets[4].data.push(timely(alpha));
+  aChart.data.labels.push(new Date(sec).getSeconds());
   aChart.update();
 };
 
@@ -89,7 +89,6 @@ const _start = document.getElementById("starter");
 const _send = document.getElementById("upload");
 
 _start.onclick = () => {
-  alert("Hi");
   if (!started) {
     if (first_start) {
       socket.emit("empty all"); // occurs on mobile

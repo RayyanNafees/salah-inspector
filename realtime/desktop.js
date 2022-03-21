@@ -88,7 +88,7 @@ socket.on("empty", emptyData); // occurs on desktop only
 const _start = document.getElementById("starter");
 const _send = document.getElementById("upload");
 
-_start.onclick = () => {
+_start?.onclick = () => {
   if (!started) {
     if (first_start) {
       socket.emit("empty all"); // occurs on mobile
@@ -100,6 +100,8 @@ _start.onclick = () => {
   }
   _start.innerHTML = started ? "Stop" : "Start";
 };
+
+if (!mobile) send.style.top = 10
 
 _send.onclick = () => {
   if (mobile) {

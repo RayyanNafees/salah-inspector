@@ -1,4 +1,3 @@
-
 const data = {
   type: "line",
   options: {
@@ -51,7 +50,9 @@ const data = {
   },
 };
 
-const actx = mobile? null:document.getElementById("realtimeChart")?.getContext("2d");
+const actx = mobile
+  ? document.createElement("canvas").getContext("2d")
+  : document.getElementById("realtimeChart")?.getContext("2d");
 
 const aChart = new Chart(actx, data);
 
@@ -78,7 +79,10 @@ const emptyData = () => {
   aChart.update();
 };
 
-socket.on("output", updateData); // occurs on dekstop only
+socket.on("output", (data) => {
+  console.log(data);
+  updateData(data);
+}); // occurs on dekstop only
 socket.on("empty", emptyData); // occurs on desktop only
 
 const _start = document.getElementById("starter");
@@ -100,5 +104,5 @@ _start.onclick = () => {
 
 _send.onclick = () => {
   const msg = prompt("Message: ");
-  if (msg) socket.emit("msg", msg);
+  if (msg) socket.emit("input", msg);
 };

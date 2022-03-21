@@ -101,7 +101,7 @@ if (mobile)
     }
     _start.innerHTML = started ? "Stop" : "Start";
   };
-else send.style.top = 10;
+else _send.style.top = 10;
 
 _send.onclick = () => {
   if (mobile) {

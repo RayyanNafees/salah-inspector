@@ -51,7 +51,7 @@ const data = {
   },
 };
 
-const actx = document.getElementById("realtimeChart")?.getContext("2d");
+const actx = mobile? null:document.getElementById("realtimeChart")?.getContext("2d");
 
 const aChart = new Chart(actx, data);
 

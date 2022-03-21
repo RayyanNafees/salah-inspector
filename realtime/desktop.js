@@ -1,13 +1,3 @@
-//
-// const socket = new WebSocket("http://localhost:3000");
-const parse = (msg) => {
-  try {
-    return JSON.parse(msg);
-  } catch (e) {
-    return msg;
-  }
-};
-let all_readings = [];
 
 const data = {
   type: "line",

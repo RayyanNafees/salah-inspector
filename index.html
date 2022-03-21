@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Salah Inspector</title>
+    <link rel="shortcut icon" href="./imgs/favicon.webp" type="image/webp" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/RayyanNafees/PyScript/winsound.js?dsfs"></script>
+    <style>
+      .garden {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        border: 5px solid #ccc;
+        border-radius: 10px;
+      }
+
+      .ball {
+        position: absolute;
+        bottom: 90px;
+        right: 90px;
+        width: 20px;
+        height: 20px;
+        background: green;
+        border-radius: 100%;
+      }
+
+      p {
+        display: flex;
+        align-items: center;
+      }
+
+      #starter {
+        position: absolute;
+        right: 30px;
+        top: 30px;
+        padding: 20px 30px;
+        border-radius: 10px;
+        background-color: red;
+        color: white;
+        font-size: xx-large;
+        border: 0;
+      }
+      #upload {
+        position: absolute;
+        right: 30px;
+        top: 120px;
+        padding: 20px 30px;
+        border-radius: 10px;
+        background-color: blue;
+        color: white;
+        font-size: xx-large;
+        border: 0;
+      }
+
+      #upload:active {
+        background-color: skyblue;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Salah Inspector !</h1>
+    <div class="garden">
+      <div class="ball"></div>
+    </div>
+
+    <pre class="output"></pre>
+    <p>
+      <span>beta: </span>
+      <input type="range" id="beta" min="-90" max="90" step="0.0000000000001" />
+    </p>
+    <p>
+      <span>gamma: </span>
+      <input
+        type="range"
+        id="gamma"
+        min="-180"
+        max="180"
+        step="0.0000000000001"
+      />
+    </p>
+
+    <p>Positions recorder: <span id="poslen"></span></p>
+
+    <button id="starter">Start</button>
+    <button id="upload">Send</button>
+
+    <canvas id="myChart"></canvas>
+  </body>
+
+  <script>
+    let started = false;
+    let first_start = true;
+
+    const betas = [],
+      gammas = [],
+      secs = [],
+      devs = [],
+      sums = [],
+      alphas = [];
+
+    var ball = document.querySelector(".ball");
+    var garden = document.querySelector(".garden");
+    var output = document.querySelector(".output");
+    var beta = document.querySelector("#beta");
+    var gamma = document.querySelector("#gamma");
+    var poslen = document.querySelector("#poslen");
+
+    var maxX = garden.clientWidth - ball.clientWidth;
+    var maxY = garden.clientHeight - ball.clientHeight;
+
+    function handleOrientation(event) {
+      var x = event.gamma; // In degree in the range [-90,90)
+      var y = event.beta; // In degree in the range [-180,180)
+      if (started) {
+        if (first_start) {
+          start = Date.now();
+          first_start = false;
+        }
+
+        gammas.push(x);
+        betas.push(y);
+        devs.push(Math.abs(x - y));
+        sums.push(x + y);
+        secs.push(Date.now() - start);
+        alphas.push(event.alpha);
+      }
+
+      output.textContent = `beta: ${y}\n`;
+      output.textContent += `gamma : ${x}\n`;
+
+      gamma.value = x;
+      beta.value = y;
+
+      // Because we don't want to have the device upside down
+      // We constrain the x value to the range [-90,90]
+      if (x > 90) {
+        x = 90;
+      }
+      if (x < -90) {
+        x = -90;
+      }
+
+      // To make computation easier we shift the range of
+      // x and y to [0,180]
+      x += 90;
+      y += 90;
+
+      // Add them to data to analyse
+      poslen.innerHTML = betas.length;
+
+      // 10 is half the size of the ball
+      // It center the positioning point to the center of the ball
+      ball.style.bottom = (maxY * y) / 180 - 10 + "px";
+      ball.style.right = (maxX * x) / 180 - 10 + "px";
+    }
+
+    window.addEventListener("deviceorientation", handleOrientation);
+
+  </script>
+
+  <script src="./analyse.js?sf"></script>
+</html>

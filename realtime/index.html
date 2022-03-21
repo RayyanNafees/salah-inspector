@@ -63,14 +63,14 @@
       #upload:active {
         background-color: skyblue;
       }
-      #upload:active {
+      #starter:active {
         background-color: rgb(247, 105, 105);
       }
     </style>
   </head>
 
   <body>
-    <h1>Realtime Y  Analyser!</h1>
+    <h1>Realtime Analyser!</h1>
     <div class="garden">
       <div class="ball"></div>
     </div>
@@ -108,7 +108,7 @@
       _Q = (q) => document.querySelectorAll(q);
 
     var socket = io.connect("https://salah-inspector.herokuapp.com"); //connects
- 
+
     var ball = Q(".ball");
     var garden = Q(".garden");
     var output = Q(".output");
@@ -120,7 +120,7 @@
     var maxY = garden.clientHeight - ball.clientHeight;
 
     if (mobile) Q("#realtimeChart").remove();
-    //else _Q("div, pre, p, button").forEach((i) => i.remove());
+    else _Q("div, pre, p, button#starter").forEach((i) => i.remove());
 
     function handleOrientation(event) {
       var x = event.gamma; // In degree in the range [-90,90)

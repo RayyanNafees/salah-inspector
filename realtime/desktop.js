@@ -102,6 +102,49 @@ _start.onclick = () => {
 };
 
 _send.onclick = () => {
-  const msg = prompt("Message: ");
-  if (msg) socket.emit("input", msg);
+  if (mobile) {
+    const msg = prompt("Message: ");
+    if (msg) socket.emit("input", msg);
+  } else {
+    const field = prompt("Field Name: ");
+    if (field && field !== "fields") {
+      fetch(
+        `https://salah-inspector-default-rtdb.firebaseio.com/charts/${field}.json`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            time: Date(),
+            gammas: aChart.data.datasets[0].data,
+            betas: aChart.data.datasets[1].data,
+            devs: aChart.data.datasets[2].data,
+            sums: aChart.data.datasets[3].data,
+            alphas: aChart.data.datasets[4].data,
+            secs: aChart.data.labels,
+          }),
+        }
+      )
+        .then(async () =>
+          fetch(
+            `https://salah-inspector-default-rtdb.firebaseio.com/charts/fields.json`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-type": "application/json",
+              },
+              body: JSON.stringify(
+                (
+                  (await fetch(
+                    `https://salah-inspector-default-rtdb.firebaseio.com/charts/fields.json`
+                  ).then((r) => r.json())) || []
+                ).concat([field])
+              ),
+            }
+          ).then((r) => alert("Success ! " + r.status))
+        )
+        .catch((e) => alert("Error: " + e));
+    }
+  }
 };

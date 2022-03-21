@@ -117,7 +117,7 @@
     var maxY = garden.clientHeight - ball.clientHeight;
 
     if (mobile) Q("#realtimeChart").remove();
-    else _Q("div, pre, p, button").forEach((i) => i.remove());
+    //else _Q("div, pre, p, button").forEach((i) => i.remove());
 
     function handleOrientation(event) {
       var x = event.gamma; // In degree in the range [-90,90)

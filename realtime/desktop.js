@@ -57,7 +57,7 @@ const actx = mobile
 const aChart = new Chart(actx, data);
 
 const updateData = ({ gamma, beta, dev, sum, sec, alpha }) => {
-  const timely = (data) => ({ x: sec, data });
+  const timely = (data) => ({ x: sec, y: data });
 
   aChart.data.datasets[0].data.push(timely(gamma));
   aChart.data.datasets[1].data.push(timely(beta));
